@@ -1,47 +1,65 @@
-# Ebenezer Library System – Team Members
+# DSA Novahive Attendance & Project Tracking
 
-## Group 37 – TM Pre-University College
+## 🧑‍🤝‍🧑 Team Attendance
 
-This project is part of our Level 100 programming coursework. It aims to solve the real-world problem of manual book tracking at Ebenezer Community Library using core Java and data structures.
-
-We are a 7-member team. So far, we have successfully implemented **Requirement 1** and **Requirement 2**, and we documented our meetings and roles accordingly.
-
----
-
-### ✅ Completed Requirements
-
-- **Requirement 1 – Book Inventory**
-  - Add, list, and store book records using array structure
-  - Validate input fields
-  - Grouping planned using hash map (future stage)
-
-- **Requirement 2 – Book Search & Sorting**
-  - Linear search by title
-  - Selection sort by publication year
-  - User-friendly console menu
+| Names     | Tasks (Requirements) | 1st Meeting (5th July, 2025) | 2nd Meeting (7th July, 2025) | 3rd Meeting (9th July, 2025) | 4th Meeting (11th July, 2025) | 5th Meeting (13th July, 2025) |
+|-----------|----------------------|------------------------------|------------------------------|------------------------------|-------------------------------|-------------------------------|
+| **Daniel** (Leader) | 5 | ✅ | ✅ | ✅ |  |  |
+| Elsie     | 7                    | ✅ | ✅ | ✅ |  |  |
+| Anas      | 3                    | ✅ | ✅ | ✅ |  |  |
+| Marie     | 4                    | ✅ | ✅ | ✅ |  |  |
+| Joel      | 6                    | ✅ | ✅ | ✅ |  |  |
+| Sefakor   | 1                    | ✅ | ✅ | ✅ |  |  |
+| Selasi    | 2                    | ✅ | ✅ | ✅ |  |  |
 
 ---
 
-### 👥 Team Members and Assigned Roles:
+## 📘 Project Requirements Breakdown
 
-1. **Daniel** – Team Lead / Book Inventory & Project Setup  
-2. **Akosua** – Borrower Registry (to be implemented)
-3. **Kwame** – Lending Tracker with Stack/Queue (to be implemented)
-4. **Lydia** – File Handling (to be implemented)
-5. **Yaw** – Book Search & Sorting Algorithms  
-6. **Afia** – Report Generation & Complexity Analysis (upcoming)
-7. **Kobby** – Input Validation, Console UI & Testing
+### 1. 📚 Book Inventory
+- Add, remove, and list books. Each book should store:
+  - **Title**, **Author**, **ISBN**, **Category**, **Year**, **Publisher**, **Shelf Location**
+- Use a **hash map** or **tree** to group books by category and allow filtering.
 
 ---
 
-### 🗓 Team Meetings:
-
-| Meeting | Focus                                    | Outcome                        |
-|---------|------------------------------------------|--------------------------------|
-| 1       | Understanding project & task breakdown   | Assigned team roles            |
-| 2       | Code skeleton & Requirement 1 start      | Add/List book logic functional |
-| 3       | Search & Sorting implementation          | Tested and working             |
+### 2. 🔍 Book Search & Sorting
+- Implement:
+  - **Binary** or **linear search** to locate a book by title, author, or ISBN.
+  - **Custom sorting** (e.g., selection sort, merge sort) for alphabetizing book titles or sorting by publication date.
 
 ---
 
-We continue to work on the next phases of the project, with every team member contributing equally.
+### 3. 🧑‍💼 Borrower Registry
+- Create a **nested dictionary** or **tree** to manage borrowers:
+  - Name, ID number, borrowed books, fines owed, contact info.
+- Implement **recursive search** by borrower ID.
+
+---
+
+### 4. 🔄 Lending Tracker
+- Use **queues** or **stacks** to manage borrowing and returning of books.
+- Each transaction should record:
+  - Book ISBN, borrower’s ID, borrow date, return date, and status.
+
+---
+
+### 5. ⏰ Overdue Monitoring
+- Use a **priority queue** or **min-heap** to track overdue books based on return deadlines.
+- Automatically flag books overdue by more than **14 days** and update borrower fines.
+
+---
+
+### 6. 🗃️ File Logging
+- Store all data changes and transaction logs in files:
+  - `books.txt`, `borrowers.txt`, `transactions.txt`, etc.
+- Enable **reloading from files** after shutdown.
+
+---
+
+### 7. 📈 Reports & Data Analysis
+- Generate reports such as:
+  - Most borrowed books in the past month.
+  - Borrowers with highest outstanding fines.
+  - Inventory distribution across categories.
+- Provide a brief **performance analysis** using **Big O** and **Omega Notation**.
