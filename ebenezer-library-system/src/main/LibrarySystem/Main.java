@@ -3,7 +3,7 @@ import java.util.*;
 public class Main {
     static BookManager bookManager = new BookManager();
     static BorrowerManager borrowerManager = new BorrowerManager();
-    static TransactionManager transactionManager = new TransactionManager();
+    static LendingTracker transactionManager = new LendingTracker(borrowerManager);
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -142,7 +142,7 @@ public class Main {
 
             int choice = getIntInRange("Choose an option: ", 0, 1);
             switch (choice) {
-                case 1 -> transactionManager.viewAllTransactions();
+                case 1 -> transactionManager.listAllTransactions();
                 case 0 -> {
                     System.out.println(" Returning to Main Menu...");
                     return;
@@ -232,16 +232,19 @@ public class Main {
         if (isbn == null) return;
         String borrowerId = getNumericInput("Enter Borrower ID");
         if (borrowerId == null) return;
+        System.out.print("Enter Borrow Date (e.g., 2025-07-15): ");
+        String date = scanner.nextLine().trim();
+        if (date.isEmpty()) return;
 
         System.out.println("\n Borrowing Preview:");
-        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId);
+        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId + " | Date: " + date);
 
         if (!confirmAction("Confirm borrow action?")) {
             System.out.println(" Borrow cancelled.");
             return;
         }
 
-        transactionManager.borrowBook(isbn, borrowerId);
+        transactionManager.borrowBook(isbn, borrowerId, date);
     }
 
     static void handleReturnBook() {
@@ -249,16 +252,19 @@ public class Main {
         if (isbn == null) return;
         String borrowerId = getNumericInput("Enter Borrower ID");
         if (borrowerId == null) return;
+        System.out.print("Enter Return Date (e.g., 2025-07-15): ");
+        String date = scanner.nextLine().trim();
+        if (date.isEmpty()) return;
 
         System.out.println("\n Return Preview:");
-        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId);
+        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId + " | Date: " + date);
 
         if (!confirmAction("Confirm return action?")) {
             System.out.println(" Return cancelled.");
             return;
         }
 
-        transactionManager.returnBook(isbn, borrowerId);
+        transactionManager.returnBook(isbn, borrowerId, date);
     }
 
     static void handleSearchBook(String type) {
@@ -347,4 +353,3 @@ public class Main {
         }
     }
 }
-// Note: The Book, Borrower, BookManager, BorrowerManager, and TransactionManager classes

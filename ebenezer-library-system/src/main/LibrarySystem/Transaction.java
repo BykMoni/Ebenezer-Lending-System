@@ -1,30 +1,29 @@
-import java.time.LocalDate;
-
 public class Transaction {
-    private String isbn;
-    private String borrowerId;
-    private LocalDate borrowDate;
-    private LocalDate returnDate;
-    private String status;
+    private String bookISBN;
+    private String borrowerID;
+    private String borrowDate;
+    private String returnDate;
+    private String status; // "Borrowed" or "Returned"
 
-    public Transaction(String isbn, String borrowerId) {
-        this.isbn = isbn;
-        this.borrowerId = borrowerId;
-        this.borrowDate = LocalDate.now();
+    public Transaction(String bookISBN, String borrowerID, String borrowDate) {
+        this.bookISBN = bookISBN;
+        this.borrowerID = borrowerID;
+        this.borrowDate = borrowDate;
         this.status = "Borrowed";
+        this.returnDate = "N/A";
     }
 
-    public void markReturned() {
-        this.returnDate = LocalDate.now();
+    public void markAsReturned(String returnDate) {
+        this.returnDate = returnDate;
         this.status = "Returned";
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getBookISBN() {
+        return bookISBN;
     }
 
-    public String getBorrowerId() {
-        return borrowerId;
+    public String getBorrowerID() {
+        return borrowerID;
     }
 
     public String getStatus() {
@@ -32,9 +31,10 @@ public class Transaction {
     }
 
     public String toString() {
-        return "ISBN: " + isbn + " | Borrower ID: " + borrowerId +
-               " | Borrowed: " + borrowDate +
-               (status.equals("Returned") ? " | Returned: " + returnDate : "") +
+        return "ISBN: " + bookISBN +
+               " | Borrower ID: " + borrowerID +
+               " | Borrow Date: " + borrowDate +
+               " | Return Date: " + returnDate +
                " | Status: " + status;
     }
 }
