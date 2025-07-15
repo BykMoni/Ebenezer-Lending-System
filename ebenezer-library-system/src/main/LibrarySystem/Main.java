@@ -1,4 +1,8 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
+
 
 public class Main {
     static BookManager bookManager = new BookManager();
@@ -92,13 +96,15 @@ public class Main {
             System.out.println("\n------ Lending & Returns ------");
             System.out.println("1. Borrow Book");
             System.out.println("2. Return Book");
+            System.out.println("3. View Overdue Books");
             System.out.println("0. Return to Main Menu");
             System.out.println("------------------------------");
 
-            int choice = getIntInRange("Choose an option: ", 0, 2);
+            int choice = getIntInRange("Choose an option: ", 0, 3);
             switch (choice) {
                 case 1 -> handleBorrowBook();
                 case 2 -> handleReturnBook();
+                case 3 -> transactionManager.listOverdueBooks();
                 case 0 -> {
                     System.out.println(" Returning to Main Menu...");
                     return;
@@ -232,19 +238,18 @@ public class Main {
         if (isbn == null) return;
         String borrowerId = getNumericInput("Enter Borrower ID");
         if (borrowerId == null) return;
-        System.out.print("Enter Borrow Date (e.g., 2025-07-15): ");
-        String date = scanner.nextLine().trim();
-        if (date.isEmpty()) return;
+        LocalDate borrowDate = getDateInput("Enter Borrow Date (e.g., 2025-07-15): ");
+        if (borrowDate == null) return;
 
         System.out.println("\n Borrowing Preview:");
-        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId + " | Date: " + date);
+        System.out.println("ISBN: " + isbn + " | Borrower ID: " + borrowerId + " | Date Borrowed: " + borrowDate);
 
         if (!confirmAction("Confirm borrow action?")) {
             System.out.println(" Borrow cancelled.");
             return;
         }
 
-        transactionManager.borrowBook(isbn, borrowerId, date);
+        transactionManager.borrowBook(isbn, borrowerId, String.valueOf(borrowDate));
     }
 
     static void handleReturnBook() {
@@ -343,6 +348,23 @@ public class Main {
         }
     }
 
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static LocalDate getDateInput(String message) {
+        while (true) {
+            System.out.print(message + " (format: yyyy-MM-dd, or type 0 to cancel): ");
+            String input = scanner.nextLine().trim();
+
+            if (input.equals("0")) return null;
+
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("❌ Invalid date. Please enter in yyyy-MM-dd format.");
+            }
+        }
+    }
+
     static String getNumericInput(String message) {
         while (true) {
             System.out.print(message + " (or type 0 to cancel): ");
@@ -352,4 +374,6 @@ public class Main {
             System.out.println(" Invalid input. Only digits allowed.");
         }
     }
+
+
 }
