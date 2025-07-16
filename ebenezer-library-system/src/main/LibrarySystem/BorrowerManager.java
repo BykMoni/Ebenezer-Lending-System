@@ -61,4 +61,9 @@ public class BorrowerManager {
         FileHandler.saveBorrowers(new ArrayList<>(borrowerMap.values()));
     }
 
+    public Collection<Borrower> getAllBorrowers() {
+    return borrowerMap.values();
+    }
+
+
 }

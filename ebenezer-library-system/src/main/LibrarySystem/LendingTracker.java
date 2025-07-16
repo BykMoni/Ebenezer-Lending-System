@@ -119,4 +119,9 @@ public class LendingTracker {
     public void saveToFile() {
         FileHandler.saveTransactions(new ArrayList<>(transactions));
     }
+
+    public List<Transaction> getAllTransactions() {
+    return new ArrayList<>(transactions);
+}
+
 }

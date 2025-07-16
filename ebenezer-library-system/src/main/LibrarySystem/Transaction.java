@@ -49,4 +49,9 @@ public class Transaction {
                 " | Return Date: " + returnDate +
                 " | Status: " + status;
     }
+
+        public String getBorrowDate() {
+    return borrowDate;
+    }   
+
 }

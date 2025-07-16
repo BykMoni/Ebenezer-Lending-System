@@ -7,6 +7,7 @@ public class Main {
     static BookManager bookManager = new BookManager();
     static BorrowerManager borrowerManager = new BorrowerManager();
     static LendingTracker transactionManager = new LendingTracker(borrowerManager);
+    static ReportManager reportManager = new ReportManager(transactionManager, borrowerManager, bookManager);
     static Scanner scanner = new Scanner(System.in);
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -18,14 +19,15 @@ public class Main {
         showIntro();
         while (true) {
             showMainMenu();
-            int choice = getIntInRange("Enter choice: ", 1, 6);
+            int choice = getIntInRange("Enter choice: ", 1, 7);
             switch (choice) {
                 case 1 -> showBookManagementMenu();
                 case 2 -> showBorrowerManagementMenu();
                 case 3 -> showLendingMenu();
                 case 4 -> showBookToolsMenu();
                 case 5 -> showTransactionMenu();
-                case 6 -> {
+                case 6 -> showReportsMenu();
+                case 7 -> {
                     System.out.println("\n👋 Exiting... Goodbye!");
                     return;
                 }
@@ -47,7 +49,8 @@ public class Main {
         System.out.println("3. Book Lending & Returns");
         System.out.println("4. Book Search & Sorting");
         System.out.println("5. Transaction Records");
-        System.out.println("6. Exit");
+        System.out.println("6. Reports & Analysis");
+        System.out.println("7. Exit");
         System.out.println("=================================");
     }
 
@@ -160,6 +163,31 @@ public class Main {
             }
         }
     }
+
+    static void showReportsMenu() {
+    while (true) {
+        System.out.println("\n------ Reports & Data Analysis ------");
+        System.out.println("1. Most Borrowed Books (Last 30 Days)");
+        System.out.println("2. Borrowers with Highest Fines");
+        System.out.println("3. Inventory by Category");
+        System.out.println("4. View Algorithm Performance Notes");
+        System.out.println("0. Return to Main Menu");
+        System.out.println("-----------------------------------");
+
+        int choice = getIntInRange("Choose an option: ", 0, 4);
+        switch (choice) {
+            case 1 -> reportManager.mostBorrowedBooksLast30Days();
+            case 2 -> reportManager.topBorrowersByFines();
+            case 3 -> reportManager.inventoryByCategory();
+            case 4 -> reportManager.showPerformanceAnalysis();
+            case 0 -> {
+                System.out.println(" Returning to Main Menu...");
+                return;
+                }
+            }
+        }
+    }
+
 
     static void handleAddBook() {
         String title = getAlphabeticInput("Enter title");

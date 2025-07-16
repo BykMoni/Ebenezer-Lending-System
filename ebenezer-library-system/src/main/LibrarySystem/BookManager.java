@@ -116,4 +116,9 @@ public class BookManager {
         booksByCategory.get(book.getCategory()).add(book);
     }
 
+    public Map<String, List<Book>> getBooksByCategory() {
+    return booksByCategory;
+    }
+
+
 }
