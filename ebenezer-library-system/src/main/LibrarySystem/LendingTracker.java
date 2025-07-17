@@ -9,11 +9,10 @@ public class LendingTracker {
     public LendingTracker(BorrowerManager manager) {
         this.transactions = new LinkedList<>();
         this.borrowerManager = manager;
-
-        // PriorityQueue sorted by due date (earliest due date has highest priority)
         this.dueQueue = new PriorityQueue<>(Comparator.comparing(Transaction::getDueDate));
     }
 
+    // Borrow Book
     public void borrowBook(String bookISBN, String borrowerID, String borrowDateStr) {
         Borrower borrower = borrowerManager.getBorrower(borrowerID);
         if (borrower == null) {
@@ -22,16 +21,18 @@ public class LendingTracker {
         }
 
         LocalDate borrowDate = LocalDate.parse(borrowDateStr);
-        LocalDate dueDate = borrowDate.plusDays(14); // Standard 14-day return policy
+        LocalDate dueDate = borrowDate.plusDays(14);
 
-        Transaction transaction = new Transaction(bookISBN, borrowerID, borrowDateStr, dueDate);
         borrower.addBorrowedBook(bookISBN);
+        Transaction transaction = new Transaction(bookISBN, borrowerID, borrowDateStr, dueDate);
         transactions.offer(transaction);
         dueQueue.offer(transaction);
 
+        saveToFile(); // 🔹 Save
         System.out.println("Book borrowed successfully. Due Date: " + dueDate);
     }
 
+    // Return Book
     public void returnBook(String bookISBN, String borrowerID, String returnDate) {
         Borrower borrower = borrowerManager.getBorrower(borrowerID);
         if (borrower == null) {
@@ -48,21 +49,34 @@ public class LendingTracker {
 
                 t.markAsReturned(returnDate);
 
-                // Calculate overdue days and apply fine if applicable
+                // Check for overdue
                 LocalDate returnDateParsed = LocalDate.parse(returnDate);
                 long daysLate = t.getDueDate().until(returnDateParsed).getDays();
                 if (daysLate > 0) {
-                    double fine = daysLate * 5.0; // $5 per day overdue
+                    double fine = daysLate * 5.0;
                     borrower.addFine(fine);
                 }
                 break;
             }
         }
 
+        saveToFile(); // 🔹 Save
         System.out.println("Book returned successfully.");
     }
 
-    // List and flag overdue books and update borrower fines if over 14 days overdue
+    // View All Transactions
+    public void listAllTransactions() {
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions found.");
+            return;
+        }
+
+        for (Transaction t : transactions) {
+            System.out.println(t);
+        }
+    }
+
+    // Overdue Check
     public void listOverdueBooks() {
         LocalDate today = LocalDate.now();
         List<Transaction> tempList = new ArrayList<>();
@@ -72,19 +86,19 @@ public class LendingTracker {
 
         while (!dueQueue.isEmpty()) {
             Transaction t = dueQueue.peek();
-            if (t.getDueDate().isBefore(today) || t.getStatus().equals("Borrowed")) {
+            if ((t.getDueDate().isBefore(today) || t.getDueDate().isEqual(today)) && t.getStatus().equals("Borrowed")) {
                 long daysLate = t.getDueDate().until(today).getDays();
                 if (daysLate > 0) {
                     t.setStatus("Overdue");
                     found = true;
                     Borrower b = borrowerManager.getBorrower(t.getBorrowerID());
-                    double fine = daysLate * 5.0; // $5 fine per overdue day
+                    double fine = daysLate * 5.0;
                     b.addFine(fine);
                     System.out.println("Overdue: " + t + " | Days Late: " + daysLate + " | Fine: $" + fine);
                 }
                 tempList.add(dueQueue.poll());
             } else {
-                break; // stop at first non-overdue item
+                break;
             }
         }
 
@@ -95,14 +109,14 @@ public class LendingTracker {
         }
     }
 
-    public void listAllTransactions() {
-        if (transactions.isEmpty()) {
-            System.out.println("No transactions found.");
-            return;
-        }
+    // File Operations
+    public void loadFromFile() {
+        List<Transaction> list = FileHandler.loadTransactions();
+        transactions.addAll(list);
+        dueQueue.addAll(list);
+    }
 
-        for (Transaction t : transactions) {
-            System.out.println(t);
-        }
+    public void saveToFile() {
+        FileHandler.saveTransactions(new ArrayList<>(transactions));
     }
 }

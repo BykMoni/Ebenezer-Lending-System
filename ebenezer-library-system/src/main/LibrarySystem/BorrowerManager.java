@@ -14,6 +14,7 @@ public class BorrowerManager {
             return;
         }
         borrowerMap.put(borrower.getId(), borrower);
+        saveToFile(); // Save after adding
         System.out.println(" Borrower added successfully.\n");
     }
 
@@ -46,4 +47,18 @@ public class BorrowerManager {
     public Borrower getBorrower(String id) {
         return borrowerMap.get(id);
     }
+
+    // Load from file
+    public void loadFromFile() {
+        List<Borrower> list = FileHandler.loadBorrowers();
+        for (Borrower b : list) {
+            borrowerMap.put(b.getId(), b);
+        }
+    }
+
+    // Save to file
+    public void saveToFile() {
+        FileHandler.saveBorrowers(new ArrayList<>(borrowerMap.values()));
+    }
+
 }

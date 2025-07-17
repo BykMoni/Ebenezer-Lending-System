@@ -10,6 +10,7 @@ public class BookManager {
     public void addBook(Book book) {
         booksByCategory.putIfAbsent(book.getCategory(), new ArrayList<>());
         booksByCategory.get(book.getCategory()).add(book);
+        saveToFile(); // Auto-save
         System.out.println(" Book added successfully.\n");
     }
 
@@ -34,6 +35,7 @@ public class BookManager {
                 Book book = iterator.next();
                 if (book.getIsbn().equals(isbn)) {
                     iterator.remove();
+                    saveToFile(); // Save after removal
                     System.out.println(" Book removed successfully.\n");
                     return;
                 }
@@ -93,4 +95,25 @@ public class BookManager {
     public void sortBooksByYear(List<Book> books) {
         books.sort(Comparator.comparingInt(Book::getYear));
     }
+
+    // Load books from file into the map
+    public void loadFromFile() {
+        List<Book> list = FileHandler.loadBooks();
+        for (Book b : list) {
+            addBookWithoutPrint(b); // Internal add to avoid duplicate messages
+        }
+    }
+
+    // Save books to file
+    public void saveToFile() {
+        List<Book> all = getAllBooksFlatList();
+        FileHandler.saveBooks(all);
+    }
+
+    // Internal helper to add without printing success
+    private void addBookWithoutPrint(Book book) {
+        booksByCategory.putIfAbsent(book.getCategory(), new ArrayList<>());
+        booksByCategory.get(book.getCategory()).add(book);
+    }
+
 }

@@ -7,6 +7,8 @@ public class Borrower {
     private List<String> borrowedBooks;
     private double finesOwed;
 
+
+
     public Borrower(String name, String id, String contactInfo) {
         this.name = name;
         this.id = id;
@@ -58,4 +60,6 @@ public class Borrower {
                " | Borrowed Books: " + borrowedBooks +
                " | Fines: $" + String.format("%.2f", finesOwed);
     }
+
+
 }

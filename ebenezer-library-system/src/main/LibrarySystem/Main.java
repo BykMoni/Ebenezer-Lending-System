@@ -3,14 +3,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-
 public class Main {
     static BookManager bookManager = new BookManager();
     static BorrowerManager borrowerManager = new BorrowerManager();
     static LendingTracker transactionManager = new LendingTracker(borrowerManager);
     static Scanner scanner = new Scanner(System.in);
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void main(String[] args) {
+        bookManager.loadFromFile();
+        transactionManager.loadFromFile();
+        borrowerManager.loadFromFile();
+
         showIntro();
         while (true) {
             showMainMenu();
@@ -156,8 +160,6 @@ public class Main {
             }
         }
     }
-
-    // HANDLERS BELOW
 
     static void handleAddBook() {
         String title = getAlphabeticInput("Enter title");
@@ -314,7 +316,6 @@ public class Main {
         }
     }
 
-    // VALIDATORS & CONFIRMATION
     static boolean confirmAction(String message) {
         while (true) {
             System.out.print(message + " (Y/N): ");
@@ -348,19 +349,15 @@ public class Main {
         }
     }
 
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     public static LocalDate getDateInput(String message) {
         while (true) {
             System.out.print(message + " (format: yyyy-MM-dd, or type 0 to cancel): ");
             String input = scanner.nextLine().trim();
-
             if (input.equals("0")) return null;
-
             try {
                 return LocalDate.parse(input, formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("❌ Invalid date. Please enter in yyyy-MM-dd format.");
+                System.out.println("Invalid date. Please enter in yyyy-MM-dd format.");
             }
         }
     }
@@ -374,6 +371,4 @@ public class Main {
             System.out.println(" Invalid input. Only digits allowed.");
         }
     }
-
-
 }

@@ -42,4 +42,7 @@ public int getYear() {
                " | Category: " + category + " | Year: " + year + " | Publisher: " + publisher +
                " | Shelf: " + shelfLocation;
     }
+
+    public String getPublisher() { return publisher;
+    }
 }
